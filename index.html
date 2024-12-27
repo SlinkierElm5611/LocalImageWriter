@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Create Background image For Sharp MFP with Unit ID</title>
+        <link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">
+    </head>
+    <body>
+        <h1>Create Background image For Sharp MFP with Unit ID</h1>
+        <h2>For good quality output, use BMP file with 1024 per 544 dots resolution</h2>
+        <h3>Upload created image in System Settings/Home Screen Settings/Background Image</h3>
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" name="fileToUpload" id="fileToUpload">
+            <input type="text" name="unitID" id="unitID" placeholder="Unit ID">
+            <button type="button" id="save">Save</button>
+        </form>
+        <canvas id="canvas" width="1024" height="544"></canvas>
+    </body>
+    <script>
+        var newFontFace = new FontFace('century-gothic', 'url(localhost/Century Gothic.ttf)');
+        const fileInput = document.getElementById('fileToUpload');
+        const textBox = document.getElementById('unitID');
+        const saveButton = document.getElementById('save');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const img = new Image();
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = () => {
+                img.src = reader.result;
+            }
+            reader.readAsDataURL(file);
+        });
+        function drawImage() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
+            ctx.font = '18px century-gothic';
+            ctx.fillStyle = 'white';
+            ctx.textAlign = 'left';
+            ctx.fillText("Supplies and Support 1-866-437-4277", 25, 380);
+            ctx.fillText("Unit ID: " + textBox.value, 25, 410);
+        }
+        img.onload = drawImage;
+        textBox.addEventListener('input', drawImage);
+        saveButton.addEventListener('click', () => {
+            const a = document.createElement('a');
+            a.download = textBox.value+'.jpg';
+            a.href = canvas.toDataURL();
+            a.click();
+        });
+    </script>
+</html>
